@@ -15,8 +15,23 @@ import streamlit as st
 import joblib
 
 APP_DIR = Path(__file__).parent
-MODEL_PATH = APP_DIR / "model_artifacts" / "random_forest_pipeline.joblib"
-METADATA_PATH = APP_DIR / "model_artifacts" / "model_metadata.json"
+ARTIFACT_DIR = APP_DIR / "model_artifacts"
+MODEL_PATH = ARTIFACT_DIR / "random_forest_pipeline.joblib"
+METADATA_PATH = ARTIFACT_DIR / "model_metadata.json"
+
+MODEL_DRIVE_ID = "1k9Dx0RL_Q_2T5UVA49VE6OYzDh3EXEhf"
+METADATA_DRIVE_ID = "1vImGh1R_1eQCMNmUIo6bgk419tLgAPWc"
+
+def ensure_artifacts():
+    ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
+    if not MODEL_PATH.exists():
+        import gdown
+        gdown.download(id=MODEL_DRIVE_ID, output=str(MODEL_PATH), quiet=False)
+    if not METADATA_PATH.exists():
+        import gdown
+        gdown.download(id=METADATA_DRIVE_ID, output=str(METADATA_PATH), quiet=False)
+
+ensure_artifacts()
 
 st.set_page_config(
     page_title="Predictive Maintenance",
